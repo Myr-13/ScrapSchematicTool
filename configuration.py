@@ -11,7 +11,10 @@ class Config:
 				"fps": 60
 			}
 		}
-		self.appdata = os.getenv("APPDATA")
+		if os.name == "nt":
+			self.appdata = os.getenv("APPDATA")
+		else:
+			self.appdata = "/home/" + os.getlogin()
 
 	def save(self):
 		# Check save path %APPDATA%/MyroDev/ScrapSchematicTool
@@ -30,6 +33,7 @@ class Config:
 
 	def load(self):
 		if os.path.exists(self.appdata + "/MyroDev/ScrapSchematicTool/" + self.file_name):
+			os.chdir(self.appdata + "/MyroDev/ScrapSchematicTool")
 			self.settings = json.load(open(self.file_name, "r"))
 
 			print("Config loaded")
